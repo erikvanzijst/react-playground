@@ -1,29 +1,30 @@
 import './App.css';
 import {useState} from "react";
 import Header from "./Header";
+import Button from "@mui/material/Button";
+import {ButtonGroup, Container} from "@mui/material";
+import Typography from "@mui/material/Typography";
 
-function MyButton({count, onClick}) {
+function MyButton({onClick, value}) {
   return (
-      <button onClick={onClick}>Clicked {count} times</button>
+      <Button variant="contained" onClick={onClick}>{value}</Button>
   )
 }
 
 function App() {
     const [count, setCount] = useState(0)
 
-    function handleClick() {
-        setCount(count + 1);
-    }
-
     return (
         <div className="App">
-            <Header/>
-            <div>
-                <MyButton count={count} onClick={handleClick}/>
-            </div>
-            <div>
-                <MyButton count={count} onClick={handleClick}/>
-            </div>
+            <Typography variant="h1">
+                {count}
+            </Typography>
+            <Container maxWidth="sm">
+                <ButtonGroup variant="contained">
+                    <MyButton onClick={() => setCount(count + 1)} value="Increment"/>
+                    <MyButton onClick={() => setCount(count - 1)} value="Decrement"/>
+                </ButtonGroup>
+            </Container>
         </div>
     );
 }

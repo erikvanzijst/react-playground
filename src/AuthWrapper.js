@@ -1,43 +1,30 @@
-import {useMemo, useState} from "react";
+import {useContext, useMemo, useState} from "react";
 import {AuthContext} from "./AuthContext";
+import Typography from "@mui/material/Typography";
+import {Container} from "@mui/material";
 
-export default function AuthWrapper({children}) {
+export function AuthState({children}) {
     // https://dmitripavlutin.com/react-context-and-usecontext/
-    const [username, setUsername] = useState("");
+    const [username, setUsername] = useState(null);
     const authState = useMemo(
         () => ({username, setUsername}),
         [username]
     );
 
-    function onLogin(name) {
-        setUsername((name));
-    }
-
     return (
         <AuthContext.Provider value={authState}>
-            {username ? children : <LoginPage onLogin={onLogin}/>}
+            {children}
         </AuthContext.Provider>
     );
 }
 
-function LoginPage({onLogin}) {
-    const [value, setValue] = useState("");
+export default function AuthWrapper({children}) {
+    const {username} = useContext(AuthContext);
 
-    function onChange(e) {
-        setValue(e.target.value);
-    }
-
-    function onClick() {
-        if (value) {
-            onLogin(value);
-        }
-    }
-
-    return (
-        <div>
-            <div>Please log in</div>
-            <input onChange={onChange}/>
-            <button onClick={onClick}>Log in</button>
-        </div>
-    );
+    return username === null ?
+        <Container maxWidth="sm" sx={{p: 2}}>
+            <Typography variant="h4">Please login</Typography>
+        </Container>
+        :
+        children;
 }
